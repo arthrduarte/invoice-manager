@@ -1,14 +1,7 @@
-# Invoice Manager
-- Name: **Arthur Duarte**
-- Student Number: **041098345**
-- Section Number: **301**
+## What changes did you make when refactoring the project?
+Well, I had to do everything in the requirements for part 2. My biggest issue was understanding that I had to parse $invoices to session and then parse it to $invoices again - I got stuck for probably more than 15min trying to figure out the session part.
 
-# What challenges did you face in completing this assignment?
-- Honestly, my biggest problem was using Bootstrap lol. It's the first time I tried to use it and the responsive part was kinda tricky
-- Also, I tried to create a function for the status' background color but it didn't work. Hence why I did it directly in the template
+## In your own words, what are the guidelines for knowing when to use $_POST over query strings and $_GET?
+We should use $_POST when we are dealing with sensitive information. Choosing query string and $_GET makes it easy for breaches.
 
-# What did you find most interesting about creating PHP templates?
-- The possibility of displaying different information with little code
-
-# How does PHP differ from other programming languages you have used?
-- I fooled around with EJS, which has a simmilar way of allowing you to embed code directly to HTML 
+## What are some limitations to using sessions for persistent data? What could be done to overcome those limitations?

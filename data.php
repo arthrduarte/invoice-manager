@@ -1,4 +1,6 @@
 <?php 
+  session_start();
+  
   $statuses = ['all', 'draft', 'pending', 'paid'];
 
   $invoices = [

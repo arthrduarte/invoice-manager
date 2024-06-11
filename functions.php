@@ -2,16 +2,22 @@
 
     require_once 'data.php';
 
+    
     function sanitize($data) {
         return array_map(function ($value) {
             return htmlspecialchars(stripslashes(trim($value)));
-        }, $data);
-    }
+            }, $data);
+            }
+            
 
     function validate($invoice) {
         $fields = ['client', 'email', 'amount', 'status'];
         $errors = [];
         global $statuses;
+        
+        $status = array_map(function($status) {
+            return $status['status'];
+        }, $statuses);
 
         foreach ($fields as $field) {
             switch ($field) {
@@ -41,7 +47,7 @@
                 case 'status':
                     if (empty($invoice[$field])) {
                         $errors[$field] = 'Status is required';
-                    } else if (!in_array($invoice[$field], $statuses)) {
+                    } else if (!in_array($invoice[$field], $status)) {
                         $errors[$field] = 'Status must be in the list of statuses';
                     }
                     break;
@@ -51,6 +57,16 @@
     }
 
     function updateInvoice($invoice){
+        global $db, $statuses;
+
+        $status_id = null;
+        foreach($statuses as $status){
+            if($status['status'] == $invoice['status']){
+                $status_id = $status['id'];
+                break;
+            }
+        }
+
         $new = [
             'number' => $invoice['number'],
             'amount' => $invoice['amount'],
@@ -59,17 +75,31 @@
             'email'  => $invoice['email']
         ];
 
-        $_SESSION['invoices'] = array_map(function($i) use ($new){
-            if($i['number'] === $new['number']){
-                return $new;
-            }
-            return $i;
-        }, $_SESSION['invoices']);
+        $sql = "UPDATE invoices SET amount = :amount, status_id = :status_id, client = :client, email = :email WHERE number = :number";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([
+            ':number' => $new['number'],
+            ':client' => $new['client'],
+            ':email'  => $new['email'],
+            ':amount' => $new['amount'],
+            ':status_id' => $status_id,
+        ]);
     
     header("Location: index.php");
     }
 
     function addInvoice($invoice){
+        global $db, $statuses;
+
+        $status_id = null;
+        
+        foreach($statuses as $status){
+            if($status['status'] == $invoice['status']){
+                $status_id = $status['id'];
+                break;
+            }
+        }
+
         $newInvoice= [
             'number' => createInvoiceNumber(),
             'amount' => $invoice['amount'],
@@ -78,7 +108,16 @@
             'email'  => $invoice['email'],
         ];
 
-        $_SESSION['invoices'][] = $newInvoice;
+        $sql = "INSERT INTO invoices (`number`, `client`, `email`, `amount`, `status_id`)
+        VALUES (:number, :client, :email, :amount, :status_id)";
+        $stmt = $db->prepare($sql);
+        $stmt->execute([
+            ':number' => $newInvoice['number'],
+            ':client' => $newInvoice['client'],
+            ':email'  => $newInvoice['email'],
+            ':amount' => $newInvoice['amount'],
+            ':status_id' => $status_id,
+        ]);
 
         header("Location: index.php");
     }
@@ -112,11 +151,11 @@
     }
 
   function deleteInvoice ($number) {
-    global $invoices;
+    global $db, $invoices;
 
-    $_SESSION['invoices'] = array_filter($_SESSION['invoices'], function ($invoice) use ($number) {
-      return $invoice['number'] != $number;
-    });
+    $sql = "DELETE FROM invoices where number = :number";
+    $stmt = $db->prepare($sql);
+    $stmt->bindValue(':number', $number);
+    $stmt->execute();
 
-    return true;
   } 

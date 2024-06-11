@@ -31,8 +31,8 @@
             <ul class="nav">
                 <?php foreach ($statuses as $status): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php?status=<?php echo $status ;?>">
-                            <?php echo ucfirst($status); ?>
+                        <a class="nav-link" href="index.php?status=<?php echo $status['status'] ;?>">
+                            <?php echo ucfirst($status['status']); ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
@@ -59,9 +59,9 @@
                     <div class="form-group mb-3">
                         <label for="status">Invoice Status:</label>
                         <select name="status" id="status" class="form-control">
-                            <option value="paid">Paid</option>
-                            <option value="pending">Pending</option>
                             <option value="draft">Draft</option>
+                            <option value="pending">Pending</option>
+                            <option value="paid">Paid</option>
                         </select>
                         <div class="error text-danger"><?php echo $errors['status'] ?? '' ;?></div>
                     </div>

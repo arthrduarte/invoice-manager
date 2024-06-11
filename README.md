@@ -1,7 +1,8 @@
-## What changes did you make when refactoring the project?
-Well, I had to do everything in the requirements for part 2. My biggest issue was understanding that I had to parse $invoices to session and then parse it to $invoices again - I got stuck for probably more than 15min trying to figure out the session part.
+## Beyond incorporating the invoice_manager database, what other refactoring did you do for this part of the project?
+I had to change my navbar, since I updated the previous $statuses array to contain an item called "all". Now it's fixed.
 
-## In your own words, what are the guidelines for knowing when to use $_POST over query strings and $_GET?
-We should use $_POST when we are dealing with sensitive information. Choosing query string and $_GET makes it easy for breaches.
+## In your own words, why is it important to use prepared statements and when should you use them?
+They reduce the risk of errors, and prevent SQL injection. We should use prepared statements everytime an input is requested from the user, because we shouldn't trust their inputs.
 
-## What are some limitations to using sessions for persistent data? What could be done to overcome those limitations?
+## How did using a database to manage the data differ from using a session array? Which do you prefer and why?
+With a database it seems to be easier. For this project, having a database helped to replace a lot of array methods that were necessaries before. Now with we can search in the database using SQL, which is more way more readable.

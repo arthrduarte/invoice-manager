@@ -2,15 +2,13 @@
     require "data.php";
     require "functions.php";
 
-    if (!isset($_SESSION['invoices'])) {
-        $_SESSION['invoices'] = $invoices;
-    }
+    $status = array_map(function($status) {
+        return $status['status'];
+    }, $statuses);
     
     if(isset($_GET['status'])){
-        $invoices = filterInvoices($_SESSION['invoices'], $_GET['status']);
+        $invoices = filterInvoices($invoices, $_GET['status']);
         $status = $_GET['status'];
-    } else {
-        $invoices = filterInvoices($_SESSION['invoices'], "all");
     }
 
     // var_dump($invoices)
@@ -23,7 +21,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <title>Invoice Manager | <?php echo ucfirst($status) ;?></title>
+    <title>Invoice Manager</title>
 </head>
 <body>
     <main class="container my-4">
@@ -33,10 +31,13 @@
                 <p>There are <?php echo count($invoices) ?> invoices</p>
             </div>
             <ul class="nav">
-                <?php foreach ($statuses as $status): ?>
+                <li class="nav-item">
+                    <a href="index.php" class="nav-link">All</a>
+                </li>
+                <?php foreach ($statuses as $status_row): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php?status=<?php echo $status ;?>">
-                            <?php echo ucfirst($status); ?>
+                        <a class="nav-link" href="index.php?status=<?php echo $status_row['status'] ;?>">
+                            <?php echo ucfirst($status_row['status']); ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
@@ -74,12 +75,12 @@
                     </div>
                     <div class="row col-lg-4">
                         <div class="col-6 col-lg-6 d-flex justify-content-center">
-                            <a class="btn btn-primary" href="update.php?number=<?php echo $invoice['number']?>">edit</a>
+                            <a class="btn btn-primary" href="update.php?number=<?php echo $invoice['number']?>">Edit</a>
                         </div>
                         <div class="col-6 col-lg-6 d-flex justify-content-center">
                             <form action="delete.php" method="post">
                                 <input type="hidden" name="number" value="<?php echo $invoice['number']; ?>">
-                                <input type="submit" value="delete" class="btn btn-danger">
+                                <input type="submit" value="Delete" class="btn btn-danger">
                             </form>
                         </div>
                     </div>

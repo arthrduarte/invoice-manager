@@ -12,7 +12,7 @@
     } 
 
     if(isset($_GET['number'])){
-        $invoice = current(array_filter($_SESSION['invoices'], function($invoice){
+        $invoice = current(array_filter($invoices, function($invoice){
             return $invoice['number'] == $_GET['number'];
         }));
 
@@ -41,10 +41,13 @@
                 <p>Updating invoice</p>
             </div>
             <ul class="nav">
+                <li class="nav-item">
+                    <a href="index.php" class="nav-link">All</a>
+                </li>
                 <?php foreach ($statuses as $status): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="index.php?status=<?php echo $status ;?>">
-                            <?php echo ucfirst($status); ?>
+                        <a class="nav-link" href="index.php?status=<?php echo $status['status'] ;?>">
+                            <?php echo ucfirst($status['status']); ?>
                         </a>
                     </li>
                 <?php endforeach; ?>
@@ -74,10 +77,10 @@
                         <label for="status">Invoice Status:</label>
                         <select name="status" id="status" class="form-control">
                             <?php foreach($statuses as $status): ?>
-                            <option value="<?php echo $status?>" 
-                            <?php if($status == $invoice['status']): ?> selected <?php endif; ?>
+                            <option value="<?php echo $status['status']?>" 
+                            <?php if($status['status'] == $invoice['status']): ?> selected <?php endif; ?>
                                 >
-                                <?php echo $status; ?>
+                                <?php echo ucfirst($status['status']); ?>
                             </option>
                             <?php endforeach; ?>
                         </select>

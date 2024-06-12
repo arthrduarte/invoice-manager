@@ -56,6 +56,30 @@
         return $errors;
     }
 
+    function saveFile($invoice_number){
+
+        $file = $_FILES['file'];
+
+        if($file['error'] === UPLOAD_ERR_OK){
+            $ext = pathinfo($file['name'], PATHINFO_EXTENSION);
+            $filename = $invoice_number . "." . $ext;
+
+            if(!file_exists('documents/')){
+                mkdir('documents/');
+            }
+
+            $dest = "documents/" . $filename;
+
+            if(file_exists($dest)){
+                unlink($dest);
+            }
+
+            return move_uploaded_file($file['tmp_name'], $dest);
+        }
+
+        return false;
+    }
+
     function updateInvoice($invoice){
         global $db, $statuses;
 
@@ -85,7 +109,11 @@
             ':status_id' => $status_id,
         ]);
     
-    header("Location: index.php");
+
+        saveFile($new['number']);
+        
+        header("Location: index.php");
+
     }
 
     function addInvoice($invoice){
@@ -118,6 +146,8 @@
             ':amount' => $newInvoice['amount'],
             ':status_id' => $status_id,
         ]);
+
+        saveFile($newInvoice['number']);
 
         header("Location: index.php");
     }

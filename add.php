@@ -8,8 +8,12 @@
 
         if(count($errors) === 0){
             addInvoice($invoice);
+            // if($_FILES['file']['error'] === UPLOAD_ERR_OK){
+            //     $name = $_FILES['image']['name'];
+            //     $file = $_FILES['image']['tmp_name'];
+            //     $dest = __DIR__ . '/documents/' . 
+            // }
         }
-        
     }
 ;?>
 <!DOCTYPE html>
@@ -29,6 +33,9 @@
                 <p>Create new invoices</p>
             </div>
             <ul class="nav">
+                <li class="nav-item">
+                    <a href="index.php" class="nav-link">All</a>
+                </li>
                 <?php foreach ($statuses as $status): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="index.php?status=<?php echo $status['status'] ;?>">
@@ -40,7 +47,7 @@
         </nav>
         <section class="bg-light p-5">
             <div class="container">
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     <div class="form-group mb-3">
                         <label for="client">Client name:</label>
                         <input type="text" id="client" name="client" class="form-control" value="<?php echo $invoice['client'] ?? ''; ?>">
@@ -64,6 +71,9 @@
                             <option value="paid">Paid</option>
                         </select>
                         <div class="error text-danger"><?php echo $errors['status'] ?? '' ;?></div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="file" name="file" id="" accept=".pdf">
                     </div>
                     <input type="submit" class="btn btn-primary" value="Submit">
                 </form>

@@ -74,15 +74,20 @@
                         </div>
                     </div>
                     <div class="row col-lg-4">
-                        <div class="col-6 col-lg-6 d-flex justify-content-center">
+                        <div class="col-4 col-lg-4 d-flex justify-content-center">
                             <a class="btn btn-primary" href="update.php?number=<?php echo $invoice['number']?>">Edit</a>
                         </div>
-                        <div class="col-6 col-lg-6 d-flex justify-content-center">
+                        <div class="col-4 col-lg-4 d-flex justify-content-center">
                             <form action="delete.php" method="post">
                                 <input type="hidden" name="number" value="<?php echo $invoice['number']; ?>">
                                 <input type="submit" value="Delete" class="btn btn-danger">
                             </form>
                         </div>
+                        <?php if(file_exists("documents/" . $invoice['number'] . ".pdf")): ?>
+                            <div class="col-4 col-lg-4 d-flex justify-content-center">
+                                 <a class="btn btn-secondary" href="documents/<?php echo $invoice['number']; ?>.pdf" target="_blank">View</a>
+                            </div>
+                        <?php endif;?>
                     </div>
                 </div>
             <?php endforeach; ?>

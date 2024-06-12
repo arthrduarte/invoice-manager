@@ -55,7 +55,7 @@
         </nav>
         <section class="bg-light p-5">
             <div class="container">
-                <form method="post">
+                <form method="post" enctype="multipart/form-data">
                     <input type="hidden" id="number" name="number" value="<?php echo $invoice['number'] ?>">
                     
                     <div class="form-group mb-3">
@@ -85,6 +85,9 @@
                             <?php endforeach; ?>
                         </select>
                         <div class="error text-danger"><?php echo $errors['status'] ?? '' ;?></div>
+                    </div>
+                    <div class="form-group mb-3">
+                        <input type="file" name="file" id="" accept=".pdf">
                     </div>
                     <button type="submit" class="btn btn-primary">Update</button>
                 </form>
